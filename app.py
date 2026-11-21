@@ -3,10 +3,13 @@
 The data comes from OpenFlights and is prepared by ``prepare_data.py``. The app
 has two views over an OpenStreetMap base map:
 
-* Airports: the points are stored in a quadtree. Each time the map moves,
-  the tree answers which airports are on screen without checking all of
-  them. When there are too many to draw, the map shows one circle per
-  tree cell, sized by how many airports it holds (level of detail).
+* Airports: the points are stored in a quadtree built on Web Mercator
+  coordinates, the same ones the map uses. Each time the map moves, the
+  tree answers which airports are on screen without checking all of them.
+  When there are too many to draw, the map shows the squares of the tree at
+  a chosen height, colored by how many airports they hold. At the automatic
+  height a square is as big as one pixel of the screen, the most detail the
+  screen can show (level of detail).
 * Routes: direct routes drawn as straight lines or bundled with kernel
   density estimation, in two strengths.
 
@@ -27,6 +30,8 @@ from dash import Dash, Input, Output, State, ctx, dcc, html
 
 LEAF_CAPACITY = 10
 MAX_DEPTH = 12
+MAX_HEIGHT = 20
+TILE_PIXELS = 512  # MapLibre draws the whole world in 512 x 512 pixels at zoom 0
 WORLD = dict(x0=-180.0, y0=-85.0, x1=180.0, y1=85.0, zoom=0.8, lon=-20.0, lat=20.0)
 MAP_STYLE = "carto-positron"  # OpenStreetMap data, light style; "open-street-map" also works
 
@@ -37,6 +42,7 @@ FAINT = "#E4E7EB"
 ACCENT = "#F28E2B"
 BAR = "#A7BBC7"
 LINK = "#3E6FA8"
+SQUARE_SCALE = [[0, "#6BAED6"], [0.5, "#2F6DA8"], [1, "#08306B"]]
 
 
 # --------------------------------------------------------------------------
@@ -47,8 +53,27 @@ airports = pd.read_csv("airports.csv", keep_default_na=False)
 routes = pd.read_csv("routes.csv", keep_default_na=False)
 bundled = {"poco": pd.read_csv("routes_bundled_light.csv"), "mucho": pd.read_csv("routes_bundled_strong.csv")}
 
-X = airports["lon"].to_numpy()
-Y = airports["lat"].to_numpy()
+
+
+def to_mercator(lon, lat):
+    """Convert degrees to Web Mercator coordinates between 0 and 1.
+
+    ``x`` grows to the east and ``y`` grows to the south, so ``(0, 0)`` is the
+    north-west corner of the map.
+    """
+    x = (np.asarray(lon) + 180) / 360
+    y = (1 - np.arcsinh(np.tan(np.radians(lat))) / np.pi) / 2
+    return x, y
+
+
+def to_degrees(x, y):
+    """Convert Web Mercator coordinates between 0 and 1 back to degrees."""
+    lon = np.asarray(x) * 360 - 180
+    lat = np.degrees(np.arctan(np.sinh(np.pi * (1 - 2 * np.asarray(y)))))
+    return lon, lat
+
+
+X, Y = to_mercator(airports["lon"], airports["lat"])
 DEGREE = airports["destinations"].to_numpy()
 by_code = airports[airports["iata"] != ""].drop_duplicates("iata").set_index("iata")
 row_of_code = (airports[airports["iata"] != ""].reset_index().drop_duplicates("iata")
@@ -83,8 +108,8 @@ class QuadNode:
 
     A node is either a leaf, which keeps the indices of its airports, or an
     internal node with four children of half its size. Every node also
-    keeps the mean position of its airports and its ``hub``, the airport
-    with the most destinations.
+    keeps its ``hub``, the airport with the most destinations. Bounds are
+    in Web Mercator coordinates between 0 and 1.
     """
 
     def __init__(self, x0, y0, x1, y1, depth):
@@ -93,7 +118,6 @@ class QuadNode:
         self.children = []
         self.indices = None
         self.count = 0
-        self.mean_x = self.mean_y = 0.0
         self.hub = None
 
     def touches(self, x0, y0, x1, y1):
@@ -109,7 +133,7 @@ def build(indices, x0, y0, x1, y1, depth=0):
 
     Args:
         indices: Array of row numbers in the airport table.
-        x0, y0, x1, y1: Bounds of the node in degrees.
+        x0, y0, x1, y1: Bounds of the node in Web Mercator coordinates.
         depth: Depth of the node, 0 for the root.
 
     Returns:
@@ -118,14 +142,13 @@ def build(indices, x0, y0, x1, y1, depth=0):
     node = QuadNode(x0, y0, x1, y1, depth)
     node.count = len(indices)
     if len(indices):
-        node.mean_x, node.mean_y = X[indices].mean(), Y[indices].mean()
         best = indices[DEGREE[indices].argmax()]
         node.hub = best if DEGREE[best] > 0 else None
     if len(indices) <= LEAF_CAPACITY or depth == MAX_DEPTH:
         node.indices = indices
         return node
     xm, ym = (x0 + x1) / 2, (y0 + y1) / 2
-    left, low = X[indices] < xm, Y[indices] < ym
+    left, low = X[indices] < xm, Y[indices] < ym  # low means north, y grows to the south
     for mask, bounds in [(left & low, (x0, y0, xm, ym)), (~left & low, (xm, y0, x1, ym)),
                          (left & ~low, (x0, ym, xm, y1)), (~left & ~low, (xm, ym, x1, y1))]:
         node.children.append(build(indices[mask], *bounds, depth + 1))
@@ -137,7 +160,7 @@ def query(node, x0, y0, x1, y1, stats):
 
     Args:
         node: Root of the tree or subtree.
-        x0, y0, x1, y1: The window in degrees.
+        x0, y0, x1, y1: The window in Web Mercator coordinates.
         stats: Dict with counters ``nodes`` (nodes visited) and ``checked``
             (airports compared one by one). It is updated in place.
 
@@ -170,7 +193,37 @@ def cells(node, depth, x0, y0, x1, y1):
     return [c for child in node.children for c in cells(child, depth, x0, y0, x1, y1)]
 
 
-tree = build(np.arange(len(airports)), -180.0, -90.0, 180.0, 90.0)
+def square_counts(node, depth, x0, y0, x1, y1, counts):
+    """Count the airports in each square of the tree at ``depth`` inside a window.
+
+    A square is identified by its column and row at that depth. Nodes at
+    ``depth`` give their count directly. Leaves that stopped splitting
+    before ``depth`` place each of their airports in the square it falls
+    in, as if the tree had kept splitting.
+
+    Args:
+        node: Root of the tree or subtree.
+        depth: Depth of the squares, 0 for the root.
+        x0, y0, x1, y1: The window in Web Mercator coordinates.
+        counts: Dict that maps ``(column, row)`` to a count. It is updated
+            in place.
+    """
+    if node.count == 0 or not node.touches(x0, y0, x1, y1):
+        return
+    side = 2 ** depth
+    if node.depth == depth:
+        key = (int(node.x0 * side), int(node.y0 * side))
+        counts[key] = counts.get(key, 0) + node.count
+    elif not node.children:
+        for i in node.indices:
+            key = (min(int(X[i] * side), side - 1), min(int(Y[i] * side), side - 1))
+            counts[key] = counts.get(key, 0) + 1
+    else:
+        for child in node.children:
+            square_counts(child, depth, x0, y0, x1, y1, counts)
+
+
+tree = build(np.arange(len(airports)), 0.0, 0.0, 1.0, 1.0)
 
 
 # --------------------------------------------------------------------------
@@ -203,6 +256,25 @@ def window_from_relayout(relayout, current):
                 lon=center["lon"], lat=center["lat"])
 
 
+def screen_box(window):
+    """Return the visible window in Web Mercator coordinates ``(x0, y0, x1, y1)``."""
+    x0, y1 = to_mercator(window["x0"], window["y0"])
+    x1, y0 = to_mercator(window["x1"], window["y1"])
+    return float(x0), float(y0), float(x1), float(y1)
+
+
+def pixel_height(zoom):
+    """Return the tree height at which a square is about one pixel on screen.
+
+    The whole world measures ``TILE_PIXELS * 2 ** zoom`` pixels and a square
+    at depth ``d`` is ``1 / 2 ** d`` of it, so one pixel is reached when
+    ``2 ** d`` equals the width of the world in pixels. The height counts
+    the root as 1, so it is the depth plus one.
+    """
+    depth = round(math.log2(TILE_PIXELS) + zoom)
+    return int(min(MAX_HEIGHT, max(1, depth + 1)))
+
+
 def depth_for_zoom(zoom):
     """Choose how deep the drawn cells go for a zoom level."""
     return int(min(MAX_DEPTH, max(2, math.floor(zoom) + 4)))
@@ -212,9 +284,23 @@ def cell_outlines(nodes):
     """Return the borders of the nodes as line coordinates separated by ``None``."""
     lon, lat = [], []
     for n in nodes:
-        lon += [n.x0, n.x1, n.x1, n.x0, n.x0, None]
-        lat += [n.y0, n.y0, n.y1, n.y1, n.y0, None]
+        (west, east), (north, south) = to_degrees([n.x0, n.x1], [n.y0, n.y1])
+        lon += [west, east, east, west, west, None]
+        lat += [south, south, north, north, south, None]
     return lon, lat
+
+
+def square_polygons(keys, depth):
+    """Return the squares ``(column, row)`` at ``depth`` as a GeoJSON feature collection."""
+    side = 2 ** depth
+    features = []
+    for i, (column, row) in enumerate(keys):
+        (west, east), (north, south) = to_degrees([column / side, (column + 1) / side],
+                                                  [row / side, (row + 1) / side])
+        ring = [[west, south], [east, south], [east, north], [west, north], [west, south]]
+        features.append({"type": "Feature", "id": i, "properties": {},
+                         "geometry": {"type": "Polygon", "coordinates": [ring]}})
+    return {"type": "FeatureCollection", "features": features}
 
 
 def base_map(figure, window):
@@ -227,37 +313,43 @@ def base_map(figure, window):
     return figure
 
 
-def airports_map(window, max_points, show_tree, selected):
-    """Draw the airports in the window as points or grouped by quadtree cell.
+def airports_map(window, max_points, height, show_tree, selected):
+    """Draw the airports in the window as airplanes or as squares of the quadtree.
 
-    When there are too many airports, each cell at the depth chosen for the
-    zoom is drawn as one circle at the mean position of its airports, with
-    an area proportional to how many it holds.
+    When there are too many airports, the map shows the squares of the tree
+    at ``height`` (1 is the root, 2 its four children, and so on), colored
+    by how many airports each one holds.
 
     Args:
         window: Visible window from :func:`window_from_relayout`.
-        max_points: Above this many airports the map switches to groups.
+        max_points: Above this many airports the map switches to squares.
+        height: Height of the squares, or 0 for the height at which a square
+            is one pixel.
         show_tree: Whether to draw the borders of the leaves on screen.
         selected: Row number of the selected airport, or ``None``.
 
     Returns:
-        The figure and a dict with the numbers shown next to the map.
+        The figure and a dict with the numbers shown above the map.
     """
-    box = (window["x0"], window["y0"], window["x1"], window["y1"])
+    box = screen_box(window)
     stats = {"nodes": 0, "checked": 0}
     found = query(tree, *box, stats)
     figure = go.Figure()
 
     if len(found) > max_points:
-        depth = depth_for_zoom(window["zoom"])
-        drawn = cells(tree, depth, *box)
-        counts = [n.count for n in drawn]
-        counts = np.array(counts)
-        figure.add_trace(go.Scattermap(
-            lon=[n.mean_x for n in drawn], lat=[n.mean_y for n in drawn], mode="markers",
-            marker=dict(size=6 + 34 * np.sqrt(counts / counts.max()), color=LINK, opacity=0.6),
-            hovertext=[f"{c} aeropuerto" if c == 1 else f"{c} aeropuertos" for c in counts], hoverinfo="text"))
-        stats["drawn"], stats["drawn_as"] = len(drawn), f"grupos dibujados, uno por cuadro del nivel {depth}"
+        height = height or pixel_height(window["zoom"])
+        depth = height - 1
+        counts = {}
+        square_counts(tree, depth, *box, counts)
+        keys, values = list(counts), np.array(list(counts.values()))
+        pixels = TILE_PIXELS * 2 ** window["zoom"] / 2 ** depth
+        figure.add_trace(go.Choroplethmap(
+            geojson=square_polygons(keys, depth), locations=list(range(len(keys))), z=np.log10(values),
+            zmin=0, zmax=max(np.log10(values.max()), 1), colorscale=SQUARE_SCALE, showscale=False,
+            marker=dict(opacity=0.85, line=dict(width=0.5 if pixels >= 8 else 0, color="white")),
+            hovertext=[f"{v} aeropuerto" if v == 1 else f"{v} aeropuertos" for v in values], hoverinfo="text"))
+        size = f"{pixels:.0f}" if pixels >= 10 else f"{pixels:.1f}"
+        stats["drawn"], stats["drawn_as"] = len(keys), f"cuadros de altura {height}, de {size} px de lado"
     else:
         rows = airports.iloc[found]
         figure.add_trace(go.Scattermap(
@@ -302,7 +394,7 @@ def routes_map(window, bundling, selected):
                                        line=dict(width=0.6, color=LINK), opacity=0.25))
 
     # level of detail: one airport per tree cell, the most connected one
-    box = (window["x0"], window["y0"], window["x1"], window["y1"])
+    box = screen_box(window)
     depth = depth_for_zoom(window["zoom"])
     shown_rows = [n.hub for n in cells(tree, depth, *box) if n.hub is not None]
     hubs = airports.iloc[shown_rows]
@@ -421,7 +513,7 @@ app.index_string = """<!DOCTYPE html>
   body { margin: 0; }
   .page { height: 100vh; display: flex; flex-direction: column; box-sizing: border-box;
           padding: 14px 28px; overflow: hidden; background: white; }
-  .header { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap;
+  .header { display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap;
             border-bottom: 1px solid #E4E7EB; padding-bottom: 12px; margin-bottom: 14px; }
   .spacer { flex: 1; }
   .numbers { display: flex; gap: 48px; flex-wrap: wrap; margin-bottom: 12px; }
@@ -493,17 +585,23 @@ app.layout = html.Div(className="page", style={"fontFamily": FONT, "color": INK}
         html.Div(className="spacer"),
         control("Vista", "Aeropuertos usa el quadtree. Rutas muestra las conexiones directas.",
                 dcc.Dropdown(["Aeropuertos", "Rutas"], "Aeropuertos", id="view", clearable=False, style=DROPDOWN),
-                "150px"),
-        control("Máximo de puntos", "Si en pantalla hay más aeropuertos, se agrupan por cuadro del árbol.",
+                "140px"),
+        control("Máximo de puntos", "Si en pantalla hay más aeropuertos, se dibujan los cuadros del árbol.",
                 dcc.Dropdown([250, 1000, 10000], 1000, id="max_points", clearable=False, style=DROPDOWN),
-                "150px"),
+                "145px"),
+        control("Altura", "Altura del quadtree que se dibuja. 1 es la raíz, 2 sus cuatro hijos. "
+                          "Automática llega a cuadros de un píxel.",
+                dcc.Dropdown([{"label": "automática", "value": 0}]
+                             + [{"label": str(h), "value": h} for h in range(1, MAX_HEIGHT + 1)],
+                             0, id="height", clearable=False, style=DROPDOWN),
+                "130px"),
         control("Árbol", "Dibuja los bordes de las hojas del quadtree que están en pantalla.",
                 dcc.Dropdown(["oculto", "visible"], "oculto", id="show_tree", clearable=False, style=DROPDOWN),
-                "120px"),
+                "110px"),
         control("Agrupamiento", "Edge bundling de las rutas. Más agrupado se ve más limpio pero esconde más.",
                 dcc.Dropdown(["ninguno", "poco", "mucho"], "poco", id="bundling", clearable=False,
                              style=DROPDOWN),
-                "140px"),
+                "130px"),
         html.Button("Reset", id="reset", style={"background": INK, "color": "white", "border": "none",
                                                 "borderRadius": "6px", "padding": "9px 20px",
                                                 "fontSize": "14px", "cursor": "pointer"}),
@@ -552,29 +650,31 @@ def select_airport(click, reset_clicks, current):
     return None if clicked == current else clicked
 
 
-@app.callback(Output("view", "value"), Output("max_points", "value"), Output("show_tree", "value"),
-              Output("bundling", "value"), Input("reset", "n_clicks"), prevent_initial_call=True)
+@app.callback(Output("view", "value"), Output("max_points", "value"), Output("height", "value"),
+              Output("show_tree", "value"), Output("bundling", "value"),
+              Input("reset", "n_clicks"), prevent_initial_call=True)
 def reset_controls(reset_clicks):
     """Restore the default controls."""
-    return "Aeropuertos", 1000, "oculto", "poco"
+    return "Aeropuertos", 1000, 0, "oculto", "poco"
 
 
-@app.callback(Output("max_points", "disabled"), Output("show_tree", "disabled"),
+@app.callback(Output("max_points", "disabled"), Output("height", "disabled"), Output("show_tree", "disabled"),
               Output("bundling", "disabled"), Input("view", "value"))
 def enable_controls(view):
     """Enable only the controls that change the current view."""
     airports_view = view == "Aeropuertos"
-    return not airports_view, not airports_view, airports_view
+    return not airports_view, not airports_view, not airports_view, airports_view
 
 
 @app.callback(Output("map", "figure"), Output("numbers", "children"),
               Output("detail", "children"), Output("detail", "style"),
-              Input("view", "value"), Input("max_points", "value"), Input("show_tree", "value"),
-              Input("bundling", "value"), Input("window", "data"), Input("selected", "data"))
-def update_dashboard(view, max_points, show_tree, bundling, window, selected):
+              Input("view", "value"), Input("max_points", "value"), Input("height", "value"),
+              Input("show_tree", "value"), Input("bundling", "value"), Input("window", "data"),
+              Input("selected", "data"))
+def update_dashboard(view, max_points, height, show_tree, bundling, window, selected):
     """Redraw the map, the figures and the detail card for the current controls and window."""
     if view == "Aeropuertos":
-        figure, stats = airports_map(window, max_points, show_tree == "visible", selected)
+        figure, stats = airports_map(window, max_points, height, show_tree == "visible", selected)
     else:
         figure, stats = routes_map(window, bundling, selected)
     if selected is None:
