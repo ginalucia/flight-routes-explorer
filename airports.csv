@@ -153,7 +153,7 @@ Qikiqtarjuaq Airport,Broughton Island,Canada,YVM,67.5457992554,-64.0314025878999
 Val-d'Or Airport,Val D'or,Canada,YVO,48.0532989502,-77.7827987671,5
 Kuujjuaq Airport,Quujjuaq,Canada,YVP,58.096099853515625,-68.4269027709961,10
 Norman Wells Airport,Norman Wells,Canada,YVQ,65.28160095214844,-126.7979965209961,4
-Vancouver International Airport,Vancouver,Canada,YVR,49.193901062,-123.183998108,76
+Vancouver International Airport,Vancouver,Canada,YVR,49.193901062,-123.183998108,64
 Buffalo Narrows Airport,Buffalo Narrows,Canada,YVT,55.8418998718,-108.417999268,0
 Wiarton Airport,Wiarton,Canada,YVV,44.7458,-81.107201,0
 Petawawa Airport,Petawawa,Canada,YWA,45.95220184326172,-77.31919860839844,0
@@ -175,7 +175,7 @@ London Airport,London,Canada,YXU,43.035599,-81.1539,5
 Abbotsford Airport,Abbotsford,Canada,YXX,49.025299072265625,-122.36100006103516,2
 Whitehorse / Erik Nielsen International Airport,Whitehorse,Canada,YXY,60.7095985413,-135.067001343,5
 North Bay Jack Garland Airport,North Bay,Canada,YYB,46.363602,-79.422798,2
-Calgary International Airport,Calgary,Canada,YYC,51.113899231,-114.019996643,60
+Calgary International Airport,Calgary,Canada,YYC,51.113899231,-114.019996643,59
 Smithers Airport,Smithers,Canada,YYD,54.82469940185547,-127.18299865722656,3
 Fort Nelson Airport,Fort Nelson,Canada,YYE,58.8363990784,-122.597000122,3
 Penticton Airport,Penticton,Canada,YYF,49.46310043334961,-119.60199737548828,1
@@ -190,7 +190,7 @@ St. John's International Airport,St. John's,Canada,YYT,47.618598938,-52.75189971
 Kapuskasing Airport,Kapuskasing,Canada,YYU,49.41389846801758,-82.46749877929688,2
 Armstrong Airport,Armstrong,Canada,YYW,50.29029846191406,-88.90969848632812,0
 Mont Joli Airport,Mont Joli,Canada,YYY,48.60860061645508,-68.20809936523438,6
-Lester B. Pearson International Airport,Toronto,Canada,YYZ,43.6772003174,-79.63059997559999,147
+Lester B. Pearson International Airport,Toronto,Canada,YYZ,43.6772003174,-79.63059997559999,141
 Downsview Airport,Toronto,Canada,YZD,43.74250030517578,-79.4655990600586,0
 Gore Bay Manitoulin Airport,Gore Bay,Canada,YZE,45.88529968261719,-82.56780242919922,0
 Yellowknife Airport,Yellowknife,Canada,YZF,62.462799072265625,-114.44000244140624,18
@@ -1765,7 +1765,7 @@ General Rodolfo Sánchez Taboada International Airport,Mexicali,Mexico,MXL,32.63
 General Francisco J. Mujica International Airport,Morelia,Mexico,MLM,19.849899292,-101.025001526,7
 Minatitlán/Coatzacoalcos National Airport,Minatitlan,Mexico,MTT,18.1033992767,-94.5807037354,1
 Monclova International Airport,Monclova,Mexico,LOV,26.9557,-101.470001,0
-Licenciado Benito Juarez International Airport,Mexico City,Mexico,MEX,19.4363,-99.072098,95
+Licenciado Benito Juarez International Airport,Mexico City,Mexico,MEX,19.4363,-99.072098,94
 General Mariano Escobedo International Airport,Monterrey,Mexico,MTY,25.7784996033,-100.107002258,32
 General Rafael Buelna International Airport,Mazatlan,Mexico,MZT,23.1613998413,-106.26599884,9
 Nogales International Airport,Nogales,Mexico,NOG,31.22610092163086,-110.97599792480467,0
@@ -1788,7 +1788,7 @@ Tlaxcala Airport,Tlaxcala,Mexico,,19.537992,-98.173492,0
 Terán Air Base,Tuxtla Gutierrez,Mexico,,16.739901,-93.173301,0
 Francisco Sarabia International Airport,Torreon,Mexico,TRC,25.5683002472,-103.411003113,6
 Angel Albino Corzo International Airport,Tuxtla Gutierrez,Mexico,TGZ,16.5636005402,-93.0224990845,5
-General Abelardo L. Rodríguez International Airport,Tijuana,Mexico,TIJ,32.541099548339844,-116.97000122070312,32
+General Abelardo L. Rodríguez International Airport,Tijuana,Mexico,TIJ,32.541099548339844,-116.97000122070312,30
 General Francisco Javier Mina International Airport,Tampico,Mexico,TAM,22.2964000702,-97.8658981323,5
 Tamuin Airport,Tamuin,Mexico,TSL,22.0383,-98.806502,0
 Licenciado Adolfo Lopez Mateos International Airport,Toluca,Mexico,TLC,19.3370990753,-99.56600189210002,10
@@ -1892,15 +1892,15 @@ Rum Cay Airport,Port Nelson,Bahamas,RCY,23.68440055847168,-74.83619689941406,1
 San Salvador Airport,Cockburn Town,Bahamas,ZSA,24.06329917907715,-74.52400207519531,4
 Philip S. W. Goldson International Airport,Belize City,Belize,BZE,17.539100646972656,-88.30819702148438,14
 Aitutaki Airport,Aitutaki,Cook Islands,AIT,-18.830900192260746,-159.76400756835938,2
-Rarotonga International Airport,Avarua,Cook Islands,RAR,-21.2026996613,-159.805999756,9
-Nadi International Airport,Nandi,Fiji,NAN,-17.755399703979492,177.4429931640625,24
-Nausori International Airport,Nausori,Fiji,SUV,-18.04330062866211,178.5590057373047,12
-Fua'amotu International Airport,Tongatapu,Tonga,TBU,-21.241199493408203,-175.14999389648438,4
+Rarotonga International Airport,Avarua,Cook Islands,RAR,-21.2026996613,-159.805999756,7
+Nadi International Airport,Nandi,Fiji,NAN,-17.755399703979492,177.4429931640625,17
+Nausori International Airport,Nausori,Fiji,SUV,-18.04330062866211,178.5590057373047,7
+Fua'amotu International Airport,Tongatapu,Tonga,TBU,-21.241199493408203,-175.14999389648438,0
 Vava'u International Airport,Vava'u,Tonga,VAV,-18.58530044555664,-173.96200561523438,0
 Bonriki International Airport,Tarawa,Kiribati,TRW,1.3816399574279783,173.14700317382812,3
 Tabiteuea North Airport,Tabiteuea North,Kiribati,TBF,-1.2244700193405151,174.7760009765625,0
-Hihifo Airport,Wallis,Wallis and Futuna,WLS,-13.2383003235,-176.199005127,3
-Faleolo International Airport,Faleolo,Samoa,APW,-13.829999923706056,-172.00799560546875,5
+Hihifo Airport,Wallis,Wallis and Futuna,WLS,-13.2383003235,-176.199005127,1
+Faleolo International Airport,Faleolo,Samoa,APW,-13.829999923706056,-172.00799560546875,1
 Pago Pago International Airport,Pago Pago,American Samoa,PPG,-14.3310003281,-170.710006714,1
 Rurutu Airport,Rurutu,French Polynesia,RUR,-22.43409919738769,-151.36099243164062,3
 Tubuai Airport,Tubuai,French Polynesia,TUB,-23.36540031433105,-149.5240020751953,3
@@ -1934,8 +1934,8 @@ Nouméa Magenta Airport,Noumea,New Caledonia,GEA,-22.25830078125,166.47300720214
 Maré Airport,Mare,New Caledonia,MEE,-21.4817008972168,168.03799438476562,1
 Touho Airport,Touho,New Caledonia,TOU,-20.790000915527344,165.25900268554688,1
 Ouvéa Airport,Ouvea,New Caledonia,UVE,-20.640600204467773,166.572998046875,2
-La Tontouta International Airport,Noumea,New Caledonia,NOU,-22.01460075378418,166.21299743652344,9
-Auckland International Airport,Auckland,New Zealand,AKL,-37.0080986023,174.792007446,50
+La Tontouta International Airport,Noumea,New Caledonia,NOU,-22.01460075378418,166.21299743652344,7
+Auckland International Airport,Auckland,New Zealand,AKL,-37.0080986023,174.792007446,40
 Taupo Airport,Taupo,New Zealand,TUO,-38.73970031738281,176.08399963378906,2
 Ardmore Airport,Ardmore,New Zealand,AMZ,-37.02970123291016,174.97300720214844,0
 Christchurch International Airport,Christchurch,New Zealand,CHC,-43.48939895629883,172.53199768066406,21
@@ -2149,12 +2149,12 @@ Canton Island Airport,Canton Island,Kiribati,CIS,-2.7681200504300003,-171.710006
 Rota International Airport,Rota,Northern Mariana Islands,ROP,14.17430019378662,145.2429962158203,2
 Saipan International Airport,Saipan,Northern Mariana Islands,SPN,15.119,145.729004,10
 Andersen Air Force Base,Andersen,Guam,UAM,13.584,144.929998,0
-Antonio B. Won Pat International Airport,Agana,Guam,GUM,13.4834003448,144.796005249,19
+Antonio B. Won Pat International Airport,Agana,Guam,GUM,13.4834003448,144.796005249,18
 Tinian International Airport,West Tinian,Northern Mariana Islands,TIQ,14.999199867248535,145.61900329589844,0
-Marshall Islands International Airport,Majuro,Marshall Islands,MAJ,7.064760208129883,171.27200317382812,4
+Marshall Islands International Airport,Majuro,Marshall Islands,MAJ,7.064760208129883,171.27200317382812,3
 Dyess Army Air Field,Kwajalein,Marshall Islands,,9.396889686580002,167.470993042,0
 Bucholz Army Air Field,Kwajalein,Marshall Islands,KWA,8.720120429992676,167.73199462890625,3
-Cassidy International Airport,Kiritimati,Kiribati,CXI,1.9861600399017332,-157.35000610351562,2
+Cassidy International Airport,Kiritimati,Kiribati,CXI,1.9861600399017332,-157.35000610351562,1
 Henderson Field,Midway,Midway Islands,MDY,28.20170021057129,-177.38099670410156,0
 Chuuk International Airport,Chuuk,Micronesia,TKK,7.461870193481445,151.84300231933594,2
 Pohnpei International Airport,Pohnpei,Micronesia,PNI,6.985099792480469,158.20899963378906,3
@@ -2176,10 +2176,10 @@ Makung Airport,Makung,Taiwan,MZG,23.568700790405277,119.62799835205078,4
 Chihhang Air Base,Taitung,Taiwan,,22.793100357055664,121.18199920654295,0
 Pingtung North Airport,Pingtung,Taiwan,PIF,22.700199127197266,120.48200225830078,0
 Taipei Songshan Airport,Taipei,Taiwan,TSA,25.06940078735352,121.552001953125,19
-Taiwan Taoyuan International Airport,Taipei,Taiwan,TPE,25.0777,121.233002,101
+Taiwan Taoyuan International Airport,Taipei,Taiwan,TPE,25.0777,121.233002,94
 Wang-an Airport,Wang An,Taiwan,WOT,23.367372512817383,119.50277709960938,0
 Hualien Airport,Hualien,Taiwan,HUN,24.023099899291992,121.61799621582033,4
-Narita International Airport,Tokyo,Japan,NRT,35.7647018433,140.386001587,104
+Narita International Airport,Tokyo,Japan,NRT,35.7647018433,140.386001587,80
 Matsumoto Airport,Matsumoto,Japan,MMJ,36.16680145263672,137.92300415039062,2
 Hyakuri Airport,Ibaraki,Japan,IBR,36.181098938,140.414993286,5
 Minami Torishima Airport,Minami Tori Shima,Japan,MUS,24.2896995544,153.979003906,0
@@ -2187,7 +2187,7 @@ Iwo Jima Airport,Iwojima,Japan,IWO,24.78400039672852,141.322998046875,0
 Nanki Shirahama Airport,Nanki-shirahama,Japan,SHM,33.6622009277,135.363998413,1
 Kohnan Airport,Kohnan,Japan,,34.59080123901367,133.93299865722656,0
 Tokachi-Obihiro Airport,Obihiro,Japan,OBO,42.7332992554,143.216995239,1
-New Chitose Airport,Sapporo,Japan,CTS,42.77519989013672,141.69200134277344,36
+New Chitose Airport,Sapporo,Japan,CTS,42.77519989013672,141.69200134277344,35
 Hakodate Airport,Hakodate,Japan,HKD,41.7700004578,140.822006226,6
 Chitose Air Base,Chitose,Japan,,42.79449844359999,141.666000366,0
 Memanbetsu Airport,Memanbetsu,Japan,MMB,43.8805999756,144.164001465,3
@@ -2204,7 +2204,7 @@ Rishiri Airport,Rishiri Island,Japan,RIS,45.2420005798,141.186004639,0
 Ashiya Airport,Ashiya,Japan,,33.88309860229492,130.6529998779297,0
 Yakushima Airport,Yakushima,Japan,KUM,30.3855991364,130.658996582,0
 Fukue Airport,Fukue,Japan,FUJ,32.66630172729492,128.83299255371094,2
-Fukuoka Airport,Fukuoka,Japan,FUK,33.585899353027344,130.4510040283203,36
+Fukuoka Airport,Fukuoka,Japan,FUK,33.585899353027344,130.4510040283203,35
 New Tanegashima Airport,Tanegashima,Japan,TNE,30.6051006317,130.990997314,0
 Kagoshima Airport,Kagoshima,Japan,KOJ,31.80340003967285,130.718994140625,11
 Miyazaki Airport,Miyazaki,Japan,KMI,31.877199173,131.449005127,7
@@ -2245,7 +2245,7 @@ Hachinohe Airport,Hachinoe,Japan,HHE,40.556400299072266,141.46600341796875,0
 Hanamaki Airport,Hanamaki,Japan,HNA,39.4286003112793,141.13499450683594,4
 Akita Airport,Akita,Japan,AXT,39.6156005859375,140.218994140625,5
 Misawa Air Base,Misawa,Japan,MSJ,40.7032012939,141.367996216,2
-Sendai Airport,Sendai,Japan,SDJ,38.1397018433,140.917007446,15
+Sendai Airport,Sendai,Japan,SDJ,38.1397018433,140.917007446,14
 Matsushima Air Base,Matsushima,Japan,,38.4048995972,141.220001221,0
 Atsugi Naval Air Facility,Atsugi,Japan,NJA,35.4546012878418,139.4499969482422,0
 Tateyama Airport,Tateyama,Japan,,34.987099,139.828995,0
@@ -2255,7 +2255,7 @@ Kisarazu Airport,Kisarazu,Japan,,35.39830017089844,139.91000366210938,0
 Shimofusa Airport,Shimofusa,Japan,,35.79890060424805,140.01100158691406,0
 Oshima Airport,Oshima,Japan,OIM,34.7820014954,139.36000061,1
 Kastner Army Heliport,Zama,Japan,,35.5138015747,139.393997192,0
-Tokyo Haneda International Airport,Tokyo,Japan,HND,35.552299,139.779999,74
+Tokyo Haneda International Airport,Tokyo,Japan,HND,35.552299,139.779999,69
 Yokota Air Base,Yokota,Japan,OKO,35.74850082397461,139.34800720214844,0
 Gwangju Airport,Kwangju,South Korea,KWJ,35.123173,126.805444,2
 Jeon Ju Airport (G-703),Jhunju,South Korea,CHN,35.87808,127.119112,0
@@ -2287,7 +2287,7 @@ Tarama Airport,Tarama,Japan,TRA,24.6539001465,124.675003052,0
 Yoron Airport,Yoron,Japan,RNJ,27.0440006256,128.401992798,0
 Futenma Marine Corps Air Station,Futema,Japan,,26.27429962158203,127.75599670410156,0
 Yonaguni Airport,Yonaguni Jima,Japan,OGN,24.46689987182617,122.97799682617188,0
-Ninoy Aquino International Airport,Manila,Philippines,MNL,14.5086,121.019997,78
+Ninoy Aquino International Airport,Manila,Philippines,MNL,14.5086,121.019997,74
 Awang Airport,Cotabato,Philippines,CBO,7.165239810943604,124.20999908447266,1
 Cagayan De Oro Airport,Ladag,Philippines,,8.41562,124.611,0
 Pagadian Airport,Pagadian,Philippines,PAG,7.83073144787,123.461179733,2
@@ -2515,7 +2515,7 @@ Gral. Bernardo O´Higgins Airport,Chillan,Chile,YAI,-36.58250045776367,-72.03140
 Pdte. Carlos Ibañez del Campo Airport,Punta Arenas,Chile,PUQ,-53.002602,-70.854599,5
 Teniente Vidal Airport,Coyhaique,Chile,GXQ,-45.594200134277344,-72.1061019897461,0
 Diego Aracena Airport,Iquique,Chile,IQQ,-20.535200119018555,-70.1812973022461,5
-Comodoro Arturo Merino Benítez International Airport,Santiago,Chile,SCL,-33.393001556396484,-70.78579711914062,41
+Comodoro Arturo Merino Benítez International Airport,Santiago,Chile,SCL,-33.393001556396484,-70.78579711914062,39
 Andrés Sabella Gálvez International Airport,Antofagasta,Chile,ANF,-23.444501,-70.445099,6
 Capitan Fuentes Martinez Airport Airport,Porvenir,Chile,WPR,-53.253700256347656,-70.31919860839844,0
 Futaleufú Airport,Futaleufu,Chile,FFU,-43.18920135498047,-71.8510971069336,0
@@ -2913,7 +2913,7 @@ Saidpur Airport,Saidpur,Bangladesh,SPD,25.75919914245605,88.90889739990234,2
 Osmany International Airport,Sylhet Osmani,Bangladesh,ZYL,24.96319961547852,91.8667984008789,4
 Tejgaon Airport,Dhaka,Bangladesh,,23.77879905700684,90.38269805908205,0
 Hazrat Shahjalal International Airport,Dhaka,Bangladesh,DAC,23.843347,90.397783,34
-Hong Kong International Airport,Hong Kong,Hong Kong,HKG,22.308901,113.915001,133
+Hong Kong International Airport,Hong Kong,Hong Kong,HKG,22.308901,113.915001,126
 Shek Kong Air Base,Sek Kong,Hong Kong,,22.436599731445312,114.08000183105467,0
 Agra Airport,Agra,India,AGR,27.155799865722656,77.96089935302734,3
 Allahabad Airport,Allahabad,India,IXD,25.440099716186523,81.73390197753906,2
@@ -3126,7 +3126,7 @@ Singapore Changi Airport,Singapore,Singapore,SIN,1.35019,103.994003,125
 Brisbane Archerfield Airport,Brisbane,Australia,ACF,-27.5702991486,153.007995605,0
 Northern Peninsula Airport,Amberley,Australia,ABM,-10.9508,142.459,1
 Alice Springs Airport,Alice Springs,Australia,ASP,-23.806699752807617,133.90199279785156,8
-Brisbane International Airport,Brisbane,Australia,BNE,-27.38419914245605,153.11700439453125,60
+Brisbane International Airport,Brisbane,Australia,BNE,-27.38419914245605,153.11700439453125,56
 Gold Coast Airport,Coolangatta,Australia,OOL,-28.1644001007,153.505004883,13
 Cairns International Airport,Cairns,Australia,CNS,-16.885799408,145.755004883,30
 Charleville Airport,Charlieville,Australia,CTL,-26.4132995605,146.261993408,4
@@ -3144,7 +3144,7 @@ RAAF Base East Sale,East Sale,Australia,,-38.0988998413,147.149002075,0
 Hobart International Airport,Hobart,Australia,HBA,-42.836101532,147.509994507,3
 Launceston Airport,Launceston,Australia,LST,-41.54529953,147.214004517,5
 Melbourne Moorabbin Airport,Melbourne,Australia,MBW,-37.97579956054688,145.1020050048828,0
-Melbourne International Airport,Melbourne,Australia,MEL,-37.673302,144.843002,55
+Melbourne International Airport,Melbourne,Australia,MEL,-37.673302,144.843002,53
 "RAAF Williams, Point Cook Base",Point Cook,Australia,,-37.932201,144.753006,0
 Adelaide International Airport,Adelaide,Australia,ADL,-34.945,138.531006,26
 RAAF Base Edinburgh,Edinburgh,Australia,,-34.70249938964844,138.62100219726562,0
@@ -3165,14 +3165,14 @@ Camden Airport,Camden,Australia,CDU,-34.04029846191406,150.68699645996094,0
 Dubbo City Regional Airport,Dubbo,Australia,DBO,-32.2167015076,148.574996948,2
 Norfolk Island International Airport,Norfolk Island,Norfolk Island,NLK,-29.04159927368164,167.93899536132812,3
 RAAF Base Richmond,Richmond,Australia,XRH,-33.600601,150.781006,0
-Sydney Kingsford Smith International Airport,Sydney,Australia,SYD,-33.94609832763672,151.177001953125,85
+Sydney Kingsford Smith International Airport,Sydney,Australia,SYD,-33.94609832763672,151.177001953125,76
 Tamworth Airport,Tamworth,Australia,TMW,-31.0839004517,150.847000122,1
 Wagga Wagga City Airport,Wagga Wagga,Australia,WGA,-35.1652984619,147.466003418,2
-Beijing Capital International Airport,Beijing,China,PEK,40.0801010131836,116.58499908447266,205
+Beijing Capital International Airport,Beijing,China,PEK,40.0801010131836,116.58499908447266,193
 Dongshan Airport,Hailar,China,HLD,49.2050018311,119.824996948,9
 Tianjin Binhai International Airport,Tianjin,China,TSN,39.1244010925,117.346000671,51
 Taiyuan Wusu Airport,Taiyuan,China,TYN,37.74689865112305,112.62799835205078,45
-Guangzhou Baiyun International Airport,Guangzhou,China,CAN,23.39240074157715,113.29900360107422,148
+Guangzhou Baiyun International Airport,Guangzhou,China,CAN,23.39240074157715,113.29900360107422,146
 Changsha Huanghua International Airport,Changcha,China,CSX,28.1891994476,113.220001221,69
 Guilin Liangjiang International Airport,Guilin,China,KWL,25.21809959411621,110.03900146484376,40
 Nanning Wuxu Airport,Nanning,China,NNG,22.608299255371094,108.1719970703125,44
@@ -3205,7 +3205,7 @@ Hotan Airport,Hotan,China,HTN,37.03850173950195,79.86489868164062,1
 Taiping Airport,Harbin,China,HRB,45.6234016418457,126.25,57
 Mudanjiang Hailang International Airport,Mudanjiang,China,MDG,44.5241012573,129.569000244,6
 Zhoushuizi Airport,Dalian,China,DLC,38.9656982421875,121.53900146484376,57
-Shanghai Pudong International Airport,Shanghai,China,PVG,31.143400192260746,121.80500030517578,151
+Shanghai Pudong International Airport,Shanghai,China,PVG,31.143400192260746,121.80500030517578,140
 Pulau Tioman Airport,Tioman,Malaysia,TOD,2.818180084228516,104.16000366210938,0
 Sultan Abdul Aziz Shah International Airport,Kuala Lumpur,Malaysia,SZB,3.130579948425293,101.54900360107422,12
 Noto Airport,Wajima,Japan,NTQ,37.2930984497,136.962005615,1
@@ -3247,7 +3247,7 @@ Whiting Field Naval Air Station - North,Milton,United States,NSE,30.7241993,-87.
 Hana Airport,Hana,United States,HNM,20.79560089111328,-156.01400756835938,1
 Ernest A. Love Field,Prescott,United States,PRC,34.65449905,-112.4199982,1
 Trenton Mercer Airport,Trenton,United States,TTN,40.27669906616211,-74.8134994506836,14
-General Edward Lawrence Logan International Airport,Boston,United States,BOS,42.36429977,-71.00520325,103
+General Edward Lawrence Logan International Airport,Boston,United States,BOS,42.36429977,-71.00520325,102
 Travis Air Force Base,Fairfield,United States,SUU,38.262699127197,-121.92700195312,0
 Griffiss International Airport,Rome,United States,RME,43.23379898,-75.40699768,0
 Wendover Airport,Wendover,United States,ENV,40.7187004089,-114.03099823,0
@@ -3268,7 +3268,7 @@ East Texas Regional Airport,Longview,United States,GGG,32.38399887084961,-94.711
 Anderson Regional Airport,Andersen,United States,AND,34.4945983887,-82.70939636230001,0
 Spokane International Airport,Spokane,United States,GEG,47.61989974975586,-117.53399658203124,10
 North Perry Airport,Hollywood,United States,HWO,26.0012,-80.2407,0
-San Francisco International Airport,San Francisco,United States,SFO,37.61899948120117,-122.375,105
+San Francisco International Airport,San Francisco,United States,SFO,37.61899948120117,-122.375,94
 Cut Bank International Airport,Cutbank,United States,CTB,48.6083984375,-112.375999451,0
 Acadiana Regional Airport,Louisiana,United States,ARA,30.0378,-91.883904,0
 Gainesville Regional Airport,Gainesville,United States,GNV,29.6900997162,-82.2717971802,5
@@ -3283,7 +3283,7 @@ Redstone Army Air Field,Redstone,United States,HUA,34.67869949,-86.68479919,0
 Pope Field,Fort Bragg,United States,POB,35.1708984375,-79.014503479004,0
 Dalhart Municipal Airport,Dalhart,United States,DHT,36.0225982666,-102.54699707,0
 DLF Airport,Del Rio,United States,DLF,29.359501,-100.778002,0
-Los Angeles International Airport,Los Angeles,United States,LAX,33.94250107,-118.4079971,148
+Los Angeles International Airport,Los Angeles,United States,LAX,33.94250107,-118.4079971,134
 Anniston Regional Airport,Anniston,United States,ANB,33.5882,-85.8581,0
 Cleveland Hopkins International Airport,Cleveland,United States,CLE,41.4117012024,-81.8498001099,56
 Dover Air Force Base,Dover,United States,DOV,39.12950134,-75.46600342,0
@@ -3293,7 +3293,7 @@ China Lake Naws (Armitage Field) Airport,China Lake,United States,,35.6853981,-1
 Huron Regional Airport,Huron,United States,HON,44.38520050048828,-98.22850036621094,1
 Juneau International Airport,Juneau,United States,JNU,58.35499954223633,-134.5760040283203,12
 Lafayette Regional Airport,Lafayette,United States,LFT,30.20529938,-91.98760223,3
-Newark Liberty International Airport,Newark,United States,EWR,40.692501068115234,-74.168701171875,153
+Newark Liberty International Airport,Newark,United States,EWR,40.692501068115234,-74.168701171875,149
 Boise Air Terminal/Gowen Field,Boise,United States,BOI,43.5644,-116.223,16
 Creech Air Force Base,Indian Springs,United States,INS,36.5872001648,-115.672996521,0
 Garden City Regional Airport,Garden City,United States,GCK,37.9275016785,-100.723999023,1
@@ -3348,7 +3348,7 @@ Massena International Richards Field,Massena,United States,MSS,44.93579864501953
 Hickory Regional Airport,Hickory,United States,HKY,35.74110031,-81.38950348,0
 Albert Whitted Airport,St. Petersburg,United States,SPG,27.7651,-82.626999,0
 Page Field,Fort Myers,United States,FMY,26.58659935,-81.86329650879999,0
-George Bush Intercontinental Houston Airport,Houston,United States,IAH,29.984399795532227,-95.34140014648438,169
+George Bush Intercontinental Houston Airport,Houston,United States,IAH,29.984399795532227,-95.34140014648438,166
 Millinocket Municipal Airport,Millinocket,United States,,45.64780044555664,-68.68560028076172,0
 Joint Base Andrews,Camp Springs,United States,ADW,38.810799,-76.866997,0
 Smith Reynolds Airport,Winston-salem,United States,INT,36.13370132446289,-80.22200012207031,0
@@ -3375,7 +3375,7 @@ Whidbey Island Naval Air Station (Ault Field),Whidbey Island,United States,NUW,4
 Alice International Airport,Alice,United States,ALI,27.7409000397,-98.02690124510002,0
 Moody Air Force Base,Valdosta,United States,VAD,30.9678001404,-83.1930007935,0
 Miami International Airport,Miami,United States,MIA,25.79319953918457,-80.29060363769531,138
-Seattle Tacoma International Airport,Seattle,United States,SEA,47.449001,-122.308998,93
+Seattle Tacoma International Airport,Seattle,United States,SEA,47.449001,-122.308998,87
 Lovell Field,Chattanooga,United States,CHA,35.035301208496094,-85.20379638671875,8
 Igor I Sikorsky Memorial Airport,Stratford,United States,BDR,41.16350173950195,-73.1261978149414,0
 Jackson-Medgar Wiley Evers International Airport,Jackson,United States,JAN,32.3111991882,-90.0758972168,9
@@ -3443,7 +3443,7 @@ Theodore Francis Green State Airport,Providence,United States,PVD,41.732601,-71.
 Salisbury Ocean City Wicomico Regional Airport,Salisbury,United States,SBY,38.34049987792969,-75.51029968261719,2
 Rancho Murieta Airport,Rancho Murieta,United States,,38.48680114746094,-121.10299682617188,0
 Bob Hope Airport,Burbank,United States,BUR,34.20069885253906,-118.35900115966795,12
-Detroit Metropolitan Wayne County Airport,Detroit,United States,DTW,42.212398529052734,-83.35340118408203,135
+Detroit Metropolitan Wayne County Airport,Detroit,United States,DTW,42.212398529052734,-83.35340118408203,130
 Tampa International Airport,Tampa,United States,TPA,27.975500106811523,-82.533203125,69
 Pembina Municipal Airport,Pembina,United States,PMB,48.9425010681,-97.2407989502,0
 Polk Army Air Field,Fort Polk,United States,POE,31.0447998,-93.1917038,0
@@ -3468,7 +3468,7 @@ Dobbins Air Reserve Base,Marietta,United States,MGE,33.91540146,-84.51629639,0
 Fairchild Air Force Base,Spokane,United States,SKA,47.6151008606,-117.65599823,0
 Roscommon County - Blodgett Memorial Airport,Houghton Lake,United States,HTL,44.359798,-84.671095,0
 Tyndall Air Force Base,Panama City,United States,PAM,30.0695991516,-85.57540130619999,0
-Dallas Fort Worth International Airport,Dallas-Fort Worth,United States,DFW,32.896801,-97.038002,188
+Dallas Fort Worth International Airport,Dallas-Fort Worth,United States,DFW,32.896801,-97.038002,184
 Melbourne International Airport,Melbourne,United States,MLB,28.10280036926269,-80.64530181884766,2
 McChord Air Force Base,Tacoma,United States,TCM,47.1376991272,-122.475997925,0
 Austin Bergstrom International Airport,Austin,United States,AUS,30.194499969482425,-97.6698989868164,42
@@ -3480,7 +3480,7 @@ St Louis Lambert International Airport,St. Louis,United States,STL,38.748697,-90
 Millville Municipal Airport,Millville,United States,MIV,39.367802,-75.072197,0
 Sheppard Air Force Base-Wichita Falls Municipal Airport,Wichita Falls,United States,SPS,33.9888,-98.491898,1
 Cincinnati Municipal Airport Lunken Field,Cincinnati,United States,LUK,39.10329819,-84.41860199,3
-Hartsfield Jackson Atlanta International Airport,Atlanta,United States,ATL,33.6367,-84.428101,217
+Hartsfield Jackson Atlanta International Airport,Atlanta,United States,ATL,33.6367,-84.428101,215
 Castle Airport,Merced,United States,MER,37.38050079,-120.5680008,0
 Mc Clellan Airfield,Sacramento,United States,MCC,38.66759872,-121.401001,0
 Gerald R. Ford International Airport,Grand Rapids,United States,GRR,42.88079834,-85.52279663,20
@@ -3512,13 +3512,13 @@ Chico Municipal Airport,Chico,United States,CIC,39.79539871,-121.8580017,1
 Burlington International Airport,Burlington,United States,BTV,44.4719009399,-73.15329742429999,10
 Jacksonville International Airport,Jacksonville,United States,JAX,30.49410057067871,-81.68789672851562,26
 Durango La Plata County Airport,Durango,United States,DRO,37.1515007019,-107.753997803,3
-Washington Dulles International Airport,Washington,United States,IAD,38.94449997,-77.45580292,127
+Washington Dulles International Airport,Washington,United States,IAD,38.94449997,-77.45580292,124
 Easterwood Field,College Station,United States,CLL,30.58860016,-96.36380005,2
 Felts Field,Spokane,United States,SFF,47.682800292969,-117.32299804688,0
 General Mitchell International Airport,Milwaukee,United States,MKE,42.94720077514648,-87.89659881591797,30
 Abilene Regional Airport,Abilene,United States,ABI,32.4113006592,-99.6819000244,1
 Columbia Regional Airport,Columbia,United States,COU,38.81809997558594,-92.21959686279295,2
-Portland International Airport,Portland,United States,PDX,45.58869934,-122.5979996,58
+Portland International Airport,Portland,United States,PDX,45.58869934,-122.5979996,57
 Dade Collier Training and Transition Airport,Miami,United States,TNT,25.861799240112,-80.897003173828,0
 Palm Beach International Airport,West Palm Beach,United States,PBI,26.68320083618164,-80.09559631347656,23
 Fort Worth Meacham International Airport,Fort Worth,United States,FTW,32.819801,-97.362396,0
@@ -3526,10 +3526,10 @@ Ogdensburg International Airport,Ogdensburg,United States,OGS,44.6819000244,-75.
 Cape Cod Coast Guard Air Station,Falmouth,United States,FMH,41.6584014893,-70.5214004517,0
 Boeing Field King County International Airport,Seattle,United States,BFI,47.52999877929688,-122.302001953125,3
 Lackland Air Force Base,San Antonio,United States,SKF,29.38419914,-98.58110046,0
-Daniel K Inouye International Airport,Honolulu,United States,HNL,21.32062,-157.924228,52
+Daniel K Inouye International Airport,Honolulu,United States,HNL,21.32062,-157.924228,33
 Des Moines International Airport,Des Moines,United States,DSM,41.53400039672852,-93.66310119628906,17
 Coastal Carolina Regional Airport,New Bern,United States,EWN,35.0730018616,-77.04290008539999,2
-San Diego International Airport,San Diego,United States,SAN,32.7336006165,-117.190002441,57
+San Diego International Airport,San Diego,United States,SAN,32.7336006165,-117.190002441,56
 Monroe Regional Airport,Monroe,United States,MLU,32.51089859008789,-92.0376968383789,3
 Shaw Air Force Base,Sumter,United States,SSC,33.97269821,-80.47059631,0
 Ontario International Airport,Ontario,United States,ONT,34.055999755859375,-117.60099792480467,15
@@ -3546,10 +3546,10 @@ Corpus Christi International Airport,Corpus Christi,United States,CRP,27.7703990
 Syracuse Hancock International Airport,Syracuse,United States,SYR,43.11119842529297,-76.1063003540039,16
 Naval Air Station Key West/Boca Chica Field,Key West,United States,NQX,24.57579994,-81.68890381,0
 Chicago Midway International Airport,Chicago,United States,MDW,41.785999,-87.752403,75
-Norman Y. Mineta San Jose International Airport,San Jose,United States,SJC,37.362598,-121.929001,30
+Norman Y. Mineta San Jose International Airport,San Jose,United States,SJC,37.362598,-121.929001,29
 Lea County Regional Airport,Hobbs,United States,HOB,32.6875,-103.2170029,1
 Northeast Philadelphia Airport,Philadelphia,United States,PNE,40.081902,-75.010597,0
-Denver International Airport,Denver,United States,DEN,39.861698150635,-104.672996521,169
+Denver International Airport,Denver,United States,DEN,39.861698150635,-104.672996521,168
 Philadelphia International Airport,Philadelphia,United States,PHL,39.87189865112305,-75.24109649658203,123
 Sioux Gateway Col. Bud Day Field,Sioux City,United States,SUX,42.40259933,-96.38439941,1
 Middle Georgia Regional Airport,Macon,United States,MCN,32.69279861450195,-83.64920043945312,2
@@ -3595,7 +3595,7 @@ Southwest Florida International Airport,Fort Myers,United States,RSW,26.53619956
 King Salmon Airport,King Salmon,United States,AKN,58.67679977,-156.6490021,8
 Muir Army Air Field (Fort Indiantown Gap) Airport,Muir,United States,MUI,40.434799,-76.569397,0
 Kapalua Airport,Lahania-kapalua,United States,JHM,20.962900161743164,-156.67300415039062,2
-John F Kennedy International Airport,New York,United States,JFK,40.63980103,-73.77890015,162
+John F Kennedy International Airport,New York,United States,JFK,40.63980103,-73.77890015,155
 Homestead ARB Airport,Homestead,United States,HST,25.48859978,-80.38359833,0
 Riverside Municipal Airport,Riverside,United States,RAL,33.95190048,-117.4449997,0
 Sherman Army Air Field,Fort Leavenworth,United States,FLV,39.3683013916,-94.9147033691,0
@@ -3628,7 +3628,7 @@ Mc Allen Miller International Airport,Mcallen,United States,MFE,26.17580032,-98.
 Norfolk Naval Station (Chambers Field),Norfolk,United States,NGU,36.937599,-76.289299,0
 Westover ARB/Metropolitan Airport,Chicopee Falls,United States,CEF,42.19400024,-72.53479767,0
 Lubbock Preston Smith International Airport,Lubbock,United States,LBB,33.663601,-101.822998,8
-Chicago O'Hare International Airport,Chicago,United States,ORD,41.9786,-87.9048,206
+Chicago O'Hare International Airport,Chicago,United States,ORD,41.9786,-87.9048,201
 Boca Raton Airport,Boca Raton,United States,BCT,26.3784999847,-80.1076965332,0
 Fairbanks International Airport,Fairbanks,United States,FAI,64.81510162,-147.8560028,18
 Quantico MCAF /Turner field,Quantico,United States,,38.50170135,-77.30529785,0
@@ -3656,7 +3656,7 @@ Cold Bay Airport,Cold Bay,United States,CDB,55.20610046386719,-162.7250061035156
 Tulsa International Airport,Tulsa,United States,TUL,36.19839859008789,-95.88809967041016,18
 Sitka Rocky Gutierrez Airport,Sitka,United States,SIT,57.04710006713867,-135.36199951171875,2
 Long Island Mac Arthur Airport,Islip,United States,ISP,40.79520035,-73.10019684,11
-Minneapolis-St Paul International/Wold-Chamberlain Airport,Minneapolis,United States,MSP,44.882,-93.221802,131
+Minneapolis-St Paul International/Wold-Chamberlain Airport,Minneapolis,United States,MSP,44.882,-93.221802,130
 New Castle Airport,Wilmington,United States,ILG,39.67869949,-75.60649872,6
 Unalaska Airport,Unalaska,United States,DUT,53.900100708,-166.544006348,3
 Louis Armstrong New Orleans International Airport,New Orleans,United States,MSY,29.99340057373047,-90.25800323486328,39
@@ -3675,7 +3675,7 @@ Destin-Ft Walton Beach Airport,Valparaiso,United States,VPS,30.4832,-86.525398,5
 Craig Field,Selma,United States,SEM,32.343898773193,-86.987800598145,0
 Key West International Airport,Key West,United States,EYW,24.556100845336918,-81.75959777832031,8
 Charlotte Douglas International Airport,Charlotte,United States,CLT,35.2140007019043,-80.94309997558594,141
-McCarran International Airport,Las Vegas,United States,LAS,36.08010101,-115.1520004,133
+McCarran International Airport,Las Vegas,United States,LAS,36.08010101,-115.1520004,132
 Orlando International Airport,Orlando,United States,MCO,28.429399490356445,-81.30899810791016,102
 Florence Regional Airport,Florence,United States,FLO,34.18539810180664,-79.7238998413086,1
 Great Falls International Airport,Great Falls,United States,GTF,47.48199844,-111.3710022,7
@@ -3723,7 +3723,7 @@ Muhammad Salahuddin Airport,Bima,Indonesia,BMU,-8.5396499633789,118.68699645996,
 Umbu Mehang Kunda Airport,Waingapu,Indonesia,WGP,-9.66922,120.302002,1
 Juanda International Airport,Surabaya,Indonesia,SUB,-7.379829883575439,112.78700256347656,26
 Adi Sumarmo Wiryokusumo Airport,Solo City,Indonesia,SOC,-7.516089916229248,110.75700378417967,4
-Incheon International Airport,Seoul,South Korea,ICN,37.46910095214844,126.45099639892578,132
+Incheon International Airport,Seoul,South Korea,ICN,37.46910095214844,126.45099639892578,118
 Chiang Mai International Airport,Chiang Mai,Thailand,CNX,18.7667999268,98.962600708,26
 Chiang Rai International Airport,Chiang Rai,Thailand,CEI,19.952299118,99.8828964233,3
 Nakhon Si Thammarat Airport,Nakhon Si Thammarat,Thailand,NST,8.539620399475098,99.9447021484375,1
@@ -3734,7 +3734,7 @@ Khon Kaen Airport,Khon Kaen,Thailand,KKC,16.466600418099997,102.783996582,2
 Sukhothai Airport,Sukhothai,Thailand,THS,17.238000869750977,99.81819915771484,1
 Ngurah Rai (Bali) International Airport,Denpasar,Indonesia,DPS,-8.7481698989868,115.16699981689,42
 Eleftherios Venizelos International Airport,Athens,Greece,ATH,37.9364013672,23.9444999695,104
-Chubu Centrair International Airport,Nagoya,Japan,NGO,34.8583984375,136.80499267578125,43
+Chubu Centrair International Airport,Nagoya,Japan,NGO,34.8583984375,136.80499267578125,41
 Kobe Airport,Kobe,Japan,UKB,34.6328010559082,135.2239990234375,8
 Pullman Moscow Regional Airport,Pullman,United States,PUW,46.7439,-117.110001,2
 Lewiston Nez Perce County Airport,Lewiston,United States,LWS,46.3745002746582,-117.01499938964844,4
@@ -3779,7 +3779,7 @@ Ministro Pistarini International Airport,Buenos Aires,Argentina,EZE,-34.8222,-58
 Erbil International Airport,Erbil,Iraq,EBL,36.23759841918945,43.96319961547852,20
 Emerald Airport,Emerald,Australia,EMD,-23.5674991608,148.179000854,1
 Athen Helenikon Airport,Athens,Greece,HEW,37.893299,23.726101,0
-Kansai International Airport,Osaka,Japan,KIX,34.42729949951172,135.24400329589844,57
+Kansai International Airport,Osaka,Japan,KIX,34.42729949951172,135.24400329589844,54
 Downtown-Manhattan/Wall St Heliport,New York,United States,JRB,40.70119858,-74.00900269,0
 Tagbilaran Airport,Tagbilaran,Philippines,TAG,9.665442,123.853533,1
 Ilulissat Airport,Ilulissat,Greenland,JAV,69.2432022095,-51.0570983887,5
@@ -3852,7 +3852,7 @@ Van Nuys Airport,Van Nuys,United States,VNY,34.209800720215,-118.48999786377,0
 Quad City International Airport,Moline,United States,MLI,41.44850158691406,-90.50749969482422,10
 Panama City-Bay Co International Airport,Panama City,United States,PFN,30.212099,-85.6828,0
 Honiara International Airport,Honiara,Solomon Islands,HIR,-9.4280004501343,160.05499267578,19
-Faa'a International Airport,Papeete,French Polynesia,PPT,-17.553699,-149.606995,30
+Faa'a International Airport,Papeete,French Polynesia,PPT,-17.553699,-149.606995,27
 Nauru International Airport,Nauru,Nauru,INU,-0.547458,166.919006,3
 Funafuti International Airport,Funafuti,Tuvalu,FUN,-8.525,179.195999,1
 Tolmachevo Airport,Novosibirsk,Russia,OVB,55.012599945068,82.650703430176,53
@@ -3914,7 +3914,7 @@ Diosdado Macapagal International Airport,Angeles City,Philippines,CRK,15.186,120
 Sandakan Airport,Sandakan,Malaysia,SDK,5.900899887084961,118.05899810791016,4
 Luang Namtha Airport,Luang Namtha,Laos,LXG,20.966999,101.400002,1
 Oudomsay Airport,Muang Xay,Laos,ODY,20.68269920349121,101.99400329589844,1
-Taoxian Airport,Shenyang,China,SHE,41.63980102539063,123.48300170898438,61
+Taoxian Airport,Shenyang,China,SHE,41.63980102539063,123.48300170898438,60
 Dongying Shengli Airport,Dongying,China,DOY,37.5085983276,118.788002014,6
 John A. Osborne Airport,Geralds,Montserrat,MNI,16.791400909423828,-62.19329833984375,0
 Petersburg James A Johnson Airport,Petersburg,United States,PSG,56.80170059,-132.9450073,2
@@ -4533,24 +4533,24 @@ Manihiki Island Airport,Manihiki Island,Cook Islands,MHX,-10.376700401306152,-16
 Mauke Airport,Mauke Island,Cook Islands,MUK,-20.13610076904297,-157.34500122070312,1
 Mitiaro Island Airport,Mitiaro Island,Cook Islands,MOI,-19.842500686645508,-157.7030029296875,1
 Tongareva Airport,Penrhyn Island,Cook Islands,PYE,-9.01436996459961,-158.03240966796875,0
-Cicia Airport,Cicia,Fiji,ICI,-17.7432994843,-179.341995239,1
+Cicia Airport,Cicia,Fiji,ICI,-17.7432994843,-179.341995239,0
 Malolo Lailai Island Airport,Malolo Lailai Island,Fiji,PTF,-17.7779006958,177.197006226,0
 Vunisea Airport,Vunisea,Fiji,KDV,-19.0580997467,178.156997681,2
 Mana Island Airport,Mana Island,Fiji,MNF,-17.6730995178,177.098007202,0
 Moala Airport,Moala,Fiji,MFJ,-18.5666999817,179.951004028,0
 Ngau Airport,Ngau,Fiji,NGI,-18.1156005859,179.339996338,0
-Lakeba Island Airport,Lakeba Island,Fiji,LKB,-18.1991996765,-178.817001343,1
+Lakeba Island Airport,Lakeba Island,Fiji,LKB,-18.1991996765,-178.817001343,0
 Labasa Airport,Lambasa,Fiji,LBS,-16.466699600219727,179.33999633789062,2
-Matei Airport,Matei,Fiji,TVU,-16.6905994415,-179.876998901,3
+Matei Airport,Matei,Fiji,TVU,-16.6905994415,-179.876998901,0
 Koro Island Airport,Koro Island,Fiji,KXF,-17.3458003998,179.42199707,0
 Rotuma Airport,Rotuma,Fiji,RTA,-12.482500076293944,177.0709991455078,1
-Savusavu Airport,Savusavu,Fiji,SVU,-16.8027992249,179.341003418,3
+Savusavu Airport,Savusavu,Fiji,SVU,-16.8027992249,179.341003418,2
 Kaufana Airport,Eua Island,Tonga,EUA,-21.3782997131,-174.957992554,0
 Lifuka Island Airport,Lifuka,Tonga,HPA,-19.777000427246094,-174.34100341796875,0
 Mata'aho Airport,"Angaha, Niuafo'ou Island",Tonga,NFO,-15.5707998276,-175.632995605,0
 Kuini Lavenia Airport,Niuatoputapu,Tonga,NTT,-15.977297,-173.791089,0
-Vanua Balavu Airport,Vanua Balavu,Fiji,VBV,-17.268999099731445,-178.9759979248047,1
-Niue International Airport,Alofi,Niue,IUE,-19.079030990600582,-169.92559814453125,1
+Vanua Balavu Airport,Vanua Balavu,Fiji,VBV,-17.268999099731445,-178.9759979248047,0
+Niue International Airport,Alofi,Niue,IUE,-19.079030990600582,-169.92559814453125,0
 Pointe Vele Airport,Futuna Island,Wallis and Futuna,FUT,-14.3114004135,-178.065994263,1
 Maota Airport,Savaii Island,Samoa,MXS,-13.742300033569336,-172.25799560546875,0
 Apataki Airport,Apataki,French Polynesia,APK,-15.5736,-146.414993,0

@@ -49,6 +49,7 @@ bundled = {"poco": pd.read_csv("routes_bundled_light.csv"), "mucho": pd.read_csv
 
 X = airports["lon"].to_numpy()
 Y = airports["lat"].to_numpy()
+DEGREE = airports["destinations"].to_numpy()
 by_code = airports[airports["iata"] != ""].drop_duplicates("iata").set_index("iata")
 row_of_code = (airports[airports["iata"] != ""].reset_index().drop_duplicates("iata")
                .set_index("iata")["index"].to_dict())
@@ -81,7 +82,9 @@ class QuadNode:
     """A square region of the map and the airports inside it.
 
     A node is either a leaf, which keeps the indices of its airports, or an
-    internal node with four children of half its size.
+    internal node with four children of half its size. Every node also
+    keeps the mean position of its airports and its ``hub``, the airport
+    with the most destinations.
     """
 
     def __init__(self, x0, y0, x1, y1, depth):
@@ -91,6 +94,7 @@ class QuadNode:
         self.indices = None
         self.count = 0
         self.mean_x = self.mean_y = 0.0
+        self.hub = None
 
     def touches(self, x0, y0, x1, y1):
         """Return True if the node overlaps the window ``(x0, y0, x1, y1)``."""
@@ -115,6 +119,8 @@ def build(indices, x0, y0, x1, y1, depth=0):
     node.count = len(indices)
     if len(indices):
         node.mean_x, node.mean_y = X[indices].mean(), Y[indices].mean()
+        best = indices[DEGREE[indices].argmax()]
+        node.hub = best if DEGREE[best] > 0 else None
     if len(indices) <= LEAF_CAPACITY or depth == MAX_DEPTH:
         node.indices = indices
         return node
@@ -256,7 +262,7 @@ def airports_map(window, max_points, show_tree, selected):
         rows = airports.iloc[found]
         figure.add_trace(go.Scattermap(
             lon=rows["lon"], lat=rows["lat"], mode="markers", customdata=found,
-            marker=dict(size=4 + 1.1 * np.sqrt(rows["destinations"]), color=LINK, opacity=0.6),
+            marker=dict(size=7 + 0.45 * np.sqrt(rows["destinations"]), symbol="airplane"),
             hovertext=rows["name"] + "<br>" + rows["city"] + ", " + rows["country"], hoverinfo="text"))
         stats["drawn"], stats["drawn_as"] = len(found), "puntos dibujados"
 
@@ -295,18 +301,22 @@ def routes_map(window, bundling, selected):
         figure.add_trace(go.Scattermap(lon=lon, lat=lat, mode="lines", hoverinfo="skip",
                                        line=dict(width=0.6, color=LINK), opacity=0.25))
 
-    hubs = by_code[by_code["destinations"] > 0]
+    # level of detail: one airport per tree cell, the most connected one
+    box = (window["x0"], window["y0"], window["x1"], window["y1"])
+    depth = depth_for_zoom(window["zoom"])
+    shown_rows = [n.hub for n in cells(tree, depth, *box) if n.hub is not None]
+    hubs = airports.iloc[shown_rows]
     figure.add_trace(go.Scattermap(
-        lon=hubs["lon"], lat=hubs["lat"], mode="markers",
-        customdata=[row_of_code[c] for c in hubs.index],
-        marker=dict(size=3 + 1.6 * np.sqrt(hubs["destinations"]), color=INK, opacity=0.55 if selected is None else 0.2),
+        lon=hubs["lon"], lat=hubs["lat"], mode="markers", customdata=shown_rows,
+        marker=dict(size=3 + 1.3 * np.sqrt(hubs["destinations"]), color=INK,
+                    opacity=0.5 if selected is None else 0.2),
         hovertext=hubs["name"] + "<br>" + hubs["destinations"].astype(str) + " destinos", hoverinfo="text"))
 
     if selected is not None and airports.at[selected, "iata"] in by_code.index:
         code = airports.at[selected, "iata"]
         own = routes[(routes["a"] == code) | (routes["b"] == code)]
         destinations = by_code.loc[[b if a == code else a for a, b in zip(own["a"], own["b"])]]
-        size = 3 + 1.6 * np.sqrt(destinations["destinations"])
+        size = 3 + 1.3 * np.sqrt(destinations["destinations"])
         # map markers have no border, so the ring is a larger orange circle under a solid one
         figure.add_trace(go.Scattermap(lon=destinations["lon"], lat=destinations["lat"], mode="markers",
                                        hoverinfo="skip", marker=dict(size=size + 5, color=ACCENT)))
@@ -318,7 +328,6 @@ def routes_map(window, bundling, selected):
         figure.add_trace(go.Scattermap(lon=[by_code.at[code, "lon"]], lat=[by_code.at[code, "lat"]],
                                        mode="markers", hoverinfo="skip", marker=dict(size=16, color=INK)))
 
-    box = (window["x0"], window["y0"], window["x1"], window["y1"])
     stats = {"nodes": 0, "checked": 0}
     found = query(tree, *box, stats)
     inside = set(airports.iloc[found]["iata"]) - {""}
@@ -430,7 +439,45 @@ app.index_string = """<!DOCTYPE html>
   }
 </style>
 </head>
-<body>{%app_entry%}<footer>{%config%}{%scripts%}{%renderer%}</footer></body>
+<body>{%app_entry%}<footer>{%config%}{%scripts%}{%renderer%}</footer>
+<script>
+// Two things Plotly does not expose for maps: drawing the world only once
+// and using an airplane as a marker. Both are set on the MapLibre map.
+(function () {
+  var PLANE = "M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19" +
+              "l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z";
+
+  function planeImage() {
+    var canvas = document.createElement("canvas");
+    canvas.width = canvas.height = 48;
+    var context = canvas.getContext("2d");
+    context.scale(2, 2);
+    context.fillStyle = "#3E6FA8";
+    context.fill(new Path2D(PLANE));
+    return context.getImageData(0, 0, 48, 48);
+  }
+
+  function prepare(map) {
+    if (map.vuelosReady) return;
+    map.vuelosReady = true;
+    map.setRenderWorldCopies(false);
+    var addPlane = function () {
+      if (!map.hasImage("airplane")) map.addImage("airplane", planeImage(), {pixelRatio: 2});
+    };
+    addPlane();
+    map.on("styledata", addPlane);
+    map.on("styleimagemissing", function (event) { if (event.id === "airplane") addPlane(); });
+  }
+
+  setInterval(function () {
+    document.querySelectorAll(".js-plotly-plot").forEach(function (graph) {
+      var layout = graph._fullLayout;
+      if (layout && layout.map && layout.map._subplot && layout.map._subplot.map) prepare(layout.map._subplot.map);
+    });
+  }, 250);
+})();
+</script>
+</body>
 </html>"""
 
 DROPDOWN = {"width": "100%", "fontSize": "14px"}

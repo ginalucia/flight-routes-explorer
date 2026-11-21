@@ -5,6 +5,8 @@ Reads the OpenFlights files ``airports.dat`` and ``routes.dat`` and writes:
 * ``airports.csv``: one row per airport with its position and number of
   destinations.
 * ``routes.csv``: one row per pair of airports with at least one direct route.
+  Routes that cross the 180th meridian (across the Pacific) are left out,
+  because on a flat map they would be drawn around the whole world.
 * ``routes_bundled_light.csv`` and ``routes_bundled_strong.csv``: the same routes after edge
   bundling with two bandwidths. Each route is a run of points and routes are
   separated by an empty row, the format Plotly expects for a line trace.
@@ -91,6 +93,11 @@ def main():
     routes = load_routes("routes.dat", codes)
 
     with_code = airports[airports["iata"] != ""].drop_duplicates("iata").set_index("iata")
+
+    # routes that cross the 180th meridian would be drawn the long way around the world
+    span = (routes["a"].map(with_code["lon"]) - routes["b"].map(with_code["lon"])).abs()
+    routes = routes[span <= 180].reset_index(drop=True)
+
     degree = pd.concat([routes["a"], routes["b"]]).value_counts()
     airports["destinations"] = airports["iata"].map(degree).fillna(0).astype(int)
 
