@@ -5,8 +5,8 @@ has two views over an OpenStreetMap base map:
 
 * Airports: the points are stored in a quadtree. Each time the map moves,
   the tree answers which airports are on screen without checking all of
-  them. When there are too many to draw, the map shows the tree cells
-  colored by how many airports they hold (level of detail).
+  them. When there are too many to draw, the map shows one circle per
+  tree cell, sized by how many airports it holds (level of detail).
 * Routes: direct routes drawn as straight lines or bundled with kernel
   density estimation, in two strengths.
 
@@ -27,7 +27,6 @@ from dash import Dash, Input, Output, State, ctx, dcc, html
 
 LEAF_CAPACITY = 10
 MAX_DEPTH = 12
-TOP_BARS = 12
 WORLD = dict(x0=-180.0, y0=-85.0, x1=180.0, y1=85.0, zoom=0.8, lon=-20.0, lat=20.0)
 MAP_STYLE = "carto-positron"  # OpenStreetMap data, light style; "open-street-map" also works
 
@@ -38,7 +37,6 @@ FAINT = "#E4E7EB"
 ACCENT = "#F28E2B"
 BAR = "#A7BBC7"
 LINK = "#3E6FA8"
-CELL_SCALE = [[0, "#DCE8F3"], [1, "#1F4E79"]]
 
 
 # --------------------------------------------------------------------------
@@ -92,6 +90,7 @@ class QuadNode:
         self.children = []
         self.indices = None
         self.count = 0
+        self.mean_x = self.mean_y = 0.0
 
     def touches(self, x0, y0, x1, y1):
         """Return True if the node overlaps the window ``(x0, y0, x1, y1)``."""
@@ -114,6 +113,8 @@ def build(indices, x0, y0, x1, y1, depth=0):
     """
     node = QuadNode(x0, y0, x1, y1, depth)
     node.count = len(indices)
+    if len(indices):
+        node.mean_x, node.mean_y = X[indices].mean(), Y[indices].mean()
     if len(indices) <= LEAF_CAPACITY or depth == MAX_DEPTH:
         node.indices = indices
         return node
@@ -201,16 +202,6 @@ def depth_for_zoom(zoom):
     return int(min(MAX_DEPTH, max(2, math.floor(zoom) + 4)))
 
 
-def cell_polygons(nodes):
-    """Return the nodes as a GeoJSON feature collection of rectangles."""
-    features = []
-    for i, n in enumerate(nodes):
-        ring = [[n.x0, n.y0], [n.x1, n.y0], [n.x1, n.y1], [n.x0, n.y1], [n.x0, n.y0]]
-        features.append({"type": "Feature", "id": i, "properties": {},
-                         "geometry": {"type": "Polygon", "coordinates": [ring]}})
-    return {"type": "FeatureCollection", "features": features}
-
-
 def cell_outlines(nodes):
     """Return the borders of the nodes as line coordinates separated by ``None``."""
     lon, lat = [], []
@@ -231,11 +222,15 @@ def base_map(figure, window):
 
 
 def airports_map(window, max_points, show_tree, selected):
-    """Draw the airports in the window as points or as quadtree cells.
+    """Draw the airports in the window as points or grouped by quadtree cell.
+
+    When there are too many airports, each cell at the depth chosen for the
+    zoom is drawn as one circle at the mean position of its airports, with
+    an area proportional to how many it holds.
 
     Args:
         window: Visible window from :func:`window_from_relayout`.
-        max_points: Above this many airports the map switches to cells.
+        max_points: Above this many airports the map switches to groups.
         show_tree: Whether to draw the borders of the leaves on screen.
         selected: Row number of the selected airport, or ``None``.
 
@@ -251,12 +246,12 @@ def airports_map(window, max_points, show_tree, selected):
         depth = depth_for_zoom(window["zoom"])
         drawn = cells(tree, depth, *box)
         counts = [n.count for n in drawn]
-        figure.add_trace(go.Choroplethmap(
-            geojson=cell_polygons(drawn), locations=list(range(len(drawn))), z=np.log10(counts),
-            customdata=counts, colorscale=CELL_SCALE, showscale=False,
-            marker=dict(opacity=0.75, line=dict(width=0.4, color="white")),
-            hovertemplate="%{customdata} aeropuertos<extra></extra>"))
-        stats["drawn"], stats["drawn_as"] = len(drawn), f"cuadros del nivel {depth} dibujados"
+        counts = np.array(counts)
+        figure.add_trace(go.Scattermap(
+            lon=[n.mean_x for n in drawn], lat=[n.mean_y for n in drawn], mode="markers",
+            marker=dict(size=6 + 34 * np.sqrt(counts / counts.max()), color=LINK, opacity=0.6),
+            hovertext=[f"{c} aeropuerto" if c == 1 else f"{c} aeropuertos" for c in counts], hoverinfo="text"))
+        stats["drawn"], stats["drawn_as"] = len(drawn), f"grupos dibujados, uno por cuadro del nivel {depth}"
     else:
         rows = airports.iloc[found]
         figure.add_trace(go.Scattermap(
@@ -332,33 +327,9 @@ def routes_map(window, bundling, selected):
 # Side panels
 # --------------------------------------------------------------------------
 
-def ranking_figure(labels, values, keys, selected):
-    """Draw a horizontal bar chart, largest bar on top.
-
-    Args:
-        labels: Bar labels.
-        values: Bar lengths.
-        keys: Value returned on click for each bar, or ``None``.
-        selected: Key of the highlighted bar, or ``None``.
-
-    Returns:
-        A ``plotly.graph_objects.Figure``.
-    """
-    figure = go.Figure(go.Bar(
-        x=values[::-1], y=labels[::-1], orientation="h", customdata=keys[::-1], width=0.6,
-        marker_color=[ACCENT if k is not None and k == selected else BAR for k in keys[::-1]],
-        hovertemplate="%{y}<br>%{x}<extra></extra>"))
-    figure.update_xaxes(showgrid=False, showticklabels=False)
-    figure.update_yaxes(showgrid=False, ticks="", tickfont=dict(size=11))
-    figure.update_layout(autosize=True, showlegend=False, plot_bgcolor="white", paper_bgcolor="white",
-                         font=dict(family=FONT, color=INK, size=12), margin=dict(l=0, r=0, t=4, b=0),
-                         hoverlabel=dict(bgcolor="white", font=dict(family=FONT)))
-    return figure
-
-
 def number(value, label):
-    """Return a large figure with a small label underneath."""
-    return html.Div([html.Div(value, style={"fontSize": "24px", "fontWeight": "600", "lineHeight": "1.1"}),
+    """Return a figure with a small label underneath."""
+    return html.Div([html.Div(value, style={"fontSize": "22px", "fontWeight": "600", "lineHeight": "1.1"}),
                      html.Div(label, style={"fontSize": "12px", "color": MUTED})])
 
 
@@ -366,8 +337,7 @@ def numbers_panel(stats):
     """Return the four figures that describe the last query to the tree."""
     total = len(airports)
     share = 100 * stats["checked"] / total
-    return html.Div(style={"display": "grid", "gridTemplateColumns": "1fr 1fr", "gap": "14px 18px",
-                           "marginBottom": "18px"}, children=[
+    return html.Div(className="numbers", children=[
         number(f"{stats['found']:,}".replace(",", " "), "aeropuertos en pantalla"),
         number(f"{stats['drawn']:,}".replace(",", " "), stats["drawn_as"]),
         number(f"{stats['checked']:,}".replace(",", " "), f"revisados con el árbol, {share:.0f}% del total"),
@@ -399,9 +369,11 @@ def chips(words):
 
 
 def detail_panel(selected):
-    """Describe the selected airport and link to it on OpenStreetMap."""
-    if selected is None:
-        return html.Div("Clic en un aeropuerto del mapa o en una barra.", style={"color": MUTED})
+    """Describe the selected airport and link to it on OpenStreetMap.
+
+    Args:
+        selected: Row number of the selected airport.
+    """
     row = airports.iloc[selected]
     osm = f"https://www.openstreetmap.org/?mlat={row['lat']:.4f}&mlon={row['lon']:.4f}#map=13/{row['lat']:.4f}/{row['lon']:.4f}"
     children = [
@@ -439,20 +411,18 @@ app.index_string = """<!DOCTYPE html>
   .header { display: flex; align-items: flex-end; gap: 24px; flex-wrap: wrap;
             border-bottom: 1px solid #E4E7EB; padding-bottom: 12px; margin-bottom: 14px; }
   .spacer { flex: 1; }
-  .main { flex: 1; min-height: 0; display: grid; grid-template-columns: 2.6fr 1fr 1fr; gap: 28px; }
-  .panel { display: flex; flex-direction: column; min-height: 0; }
-  .grow { flex: 1; min-height: 0; }
-  .detail { overflow-y: auto; font-size: 13px; }
-  @media (max-width: 1100px) {
-    .page { height: auto; overflow: visible; }
-    .main { grid-template-columns: 1fr 1fr; }
-    .main > .panel:first-child { grid-column: 1 / -1; }
-    .grow { height: 480px !important; flex: none; }
-    .detail { height: auto !important; }
-  }
+  .numbers { display: flex; gap: 48px; flex-wrap: wrap; margin-bottom: 12px; }
+  .main { flex: 1; min-height: 0; position: relative; }
+  .map { position: absolute; inset: 0; }
+  .detail { position: absolute; top: 14px; right: 14px; width: 300px; max-height: calc(100% - 28px);
+            overflow-y: auto; box-sizing: border-box; padding: 14px 16px; font-size: 13px; background: white;
+            border-radius: 8px; box-shadow: 0 2px 10px rgba(31, 41, 51, 0.15); }
   @media (max-width: 700px) {
-    .main { grid-template-columns: 1fr; }
-    .grow { height: 380px !important; }
+    .page { height: auto; overflow: visible; padding: 14px 16px; }
+    .numbers { gap: 16px 28px; }
+    .main { flex: none; }
+    .map { position: relative; height: 70vh !important; }
+    .detail { position: static; width: auto; max-height: none; box-shadow: none; padding: 14px 0; }
   }
 </style>
 </head>
@@ -473,7 +443,7 @@ app.layout = html.Div(className="page", style={"fontFamily": FONT, "color": INK}
         control("Vista", "Aeropuertos usa el quadtree. Rutas muestra las conexiones directas.",
                 dcc.Dropdown(["Aeropuertos", "Rutas"], "Aeropuertos", id="view", clearable=False, style=DROPDOWN),
                 "150px"),
-        control("Máximo de puntos", "Si en pantalla hay más aeropuertos, se dibujan cuadros del árbol.",
+        control("Máximo de puntos", "Si en pantalla hay más aeropuertos, se agrupan por cuadro del árbol.",
                 dcc.Dropdown([250, 1000, 10000], 1000, id="max_points", clearable=False, style=DROPDOWN),
                 "150px"),
         control("Árbol", "Dibuja los bordes de las hojas del quadtree que están en pantalla.",
@@ -491,20 +461,11 @@ app.layout = html.Div(className="page", style={"fontFamily": FONT, "color": INK}
     dcc.Store(id="window", data=WORLD),
     dcc.Store(id="selected", data=None),
 
+    html.Div(id="numbers"),
+
     html.Div(className="main", children=[
-        html.Div(className="panel", children=[
-            dcc.Graph(id="map", className="grow", config=GRAPH_CONFIG),
-        ]),
-        html.Div(className="panel", children=[
-            heading("En pantalla", "Lo que respondió el quadtree para la zona visible del mapa."),
-            html.Div(id="numbers"),
-            html.Div(id="ranking_heading"),
-            dcc.Graph(id="ranking", className="grow", config=GRAPH_CONFIG),
-        ]),
-        html.Div(className="panel", children=[
-            heading("Detalle"),
-            html.Div(id="detail", className="detail grow"),
-        ]),
+        dcc.Graph(id="map", className="map", config=GRAPH_CONFIG, style={"height": "100%"}),
+        html.Div(id="detail", className="detail", style={"display": "none"}),
     ]),
 ])
 
@@ -523,20 +484,18 @@ def store_window(relayout, reset_clicks, current):
 
 
 @app.callback(Output("selected", "data"),
-              Input("map", "clickData"), Input("ranking", "clickData"), Input("reset", "n_clicks"),
-              State("selected", "data"))
-def select_airport(map_click, ranking_click, reset_clicks, current):
-    """Store the airport clicked on the map or in the ranking.
+              Input("map", "clickData"), Input("reset", "n_clicks"), State("selected", "data"))
+def select_airport(click, reset_clicks, current):
+    """Store the airport clicked on the map.
 
     Clicking the selected airport again clears the selection.
     """
     if ctx.triggered_id == "reset":
         return None
-    click = map_click if ctx.triggered_id == "map" else ranking_click
     if not click:
         return current
     clicked = click["points"][0].get("customdata")
-    if clicked is None:  # click on a cell, a line or a country bar
+    if clicked is None:  # click on a cell or a line
         return current
     clicked = int(clicked[0] if isinstance(clicked, list) else clicked)
     return None if clicked == current else clicked
@@ -557,29 +516,19 @@ def enable_controls(view):
     return not airports_view, not airports_view, airports_view
 
 
-@app.callback(Output("map", "figure"), Output("numbers", "children"), Output("ranking_heading", "children"),
-              Output("ranking", "figure"), Output("detail", "children"),
+@app.callback(Output("map", "figure"), Output("numbers", "children"),
+              Output("detail", "children"), Output("detail", "style"),
               Input("view", "value"), Input("max_points", "value"), Input("show_tree", "value"),
               Input("bundling", "value"), Input("window", "data"), Input("selected", "data"))
 def update_dashboard(view, max_points, show_tree, bundling, window, selected):
-    """Redraw the map and the side panels for the current controls and window."""
+    """Redraw the map, the figures and the detail card for the current controls and window."""
     if view == "Aeropuertos":
         figure, stats = airports_map(window, max_points, show_tree == "visible", selected)
-        rows = airports.iloc[query(tree, window["x0"], window["y0"], window["x1"], window["y1"],
-                                   {"nodes": 0, "checked": 0})]
-        top = rows["country"].value_counts().head(TOP_BARS)
-        ranking = ranking_figure(list(top.index), list(top.values), [None] * len(top), None)
-        title = heading("Países en pantalla", "Número de aeropuertos de cada país en la zona visible.")
     else:
         figure, stats = routes_map(window, bundling, selected)
-        rows = airports.iloc[query(tree, window["x0"], window["y0"], window["x1"], window["y1"],
-                                   {"nodes": 0, "checked": 0})]
-        top = rows[rows["destinations"] > 0].sort_values("destinations", ascending=False).head(TOP_BARS)
-        labels = [f"{c} {city}" for c, city in zip(top["iata"], top["city"])]
-        ranking = ranking_figure(labels, list(top["destinations"]), list(top.index), selected)
-        title = heading("Más conectados", "Destinos directos de los aeropuertos en la zona visible. "
-                                          "Clic para ver sus rutas.")
-    return figure, numbers_panel(stats), title, ranking, detail_panel(selected)
+    if selected is None:
+        return figure, numbers_panel(stats), None, {"display": "none"}
+    return figure, numbers_panel(stats), detail_panel(selected), {"display": "block"}
 
 
 if __name__ == "__main__":
