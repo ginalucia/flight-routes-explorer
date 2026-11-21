@@ -256,7 +256,7 @@ def airports_map(window, max_points, show_tree, selected):
         rows = airports.iloc[found]
         figure.add_trace(go.Scattermap(
             lon=rows["lon"], lat=rows["lat"], mode="markers", customdata=found,
-            marker=dict(size=4 + 1.1 * np.sqrt(rows["destinations"]), color=ACCENT, opacity=0.8),
+            marker=dict(size=4 + 1.1 * np.sqrt(rows["destinations"]), color=LINK, opacity=0.6),
             hovertext=rows["name"] + "<br>" + rows["city"] + ", " + rows["country"], hoverinfo="text"))
         stats["drawn"], stats["drawn_as"] = len(found), "puntos dibujados"
 
@@ -306,10 +306,14 @@ def routes_map(window, bundling, selected):
         code = airports.at[selected, "iata"]
         own = routes[(routes["a"] == code) | (routes["b"] == code)]
         destinations = by_code.loc[[b if a == code else a for a, b in zip(own["a"], own["b"])]]
+        size = 3 + 1.6 * np.sqrt(destinations["destinations"])
+        # map markers have no border, so the ring is a larger orange circle under a solid one
+        figure.add_trace(go.Scattermap(lon=destinations["lon"], lat=destinations["lat"], mode="markers",
+                                       hoverinfo="skip", marker=dict(size=size + 5, color=ACCENT)))
         figure.add_trace(go.Scattermap(
             lon=destinations["lon"], lat=destinations["lat"], mode="markers",
             customdata=[row_of_code[c] for c in destinations.index],
-            marker=dict(size=9, color=ACCENT, opacity=0.95),
+            marker=dict(size=size, color="#9AA5B1"),
             hovertext=destinations["name"] + "<br>" + destinations["city"], hoverinfo="text"))
         figure.add_trace(go.Scattermap(lon=[by_code.at[code, "lon"]], lat=[by_code.at[code, "lat"]],
                                        mode="markers", hoverinfo="skip", marker=dict(size=16, color=INK)))
